@@ -1,0 +1,71 @@
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local targetItemNames = {"aura", "Fluffy Satin Gloves Black"}
+
+local function hasItemInName(accessory)
+    for _, itemName in pairs(targetItemNames) do
+        if accessory.Name:lower():find(itemName:lower()) then
+            return true
+        end
+    end
+    return false
+end
+
+local function isAccessoryOnHeadOrAbove(accessory)
+    local handle = accessory:FindFirstChild("Handle")
+    if handle then
+        if handle.Parent and handle.Parent.Name == "Head" then
+            return true
+        end
+    end
+
+    local attachment = accessory:FindFirstChildWhichIsA("Attachment")
+    if attachment and attachment.Parent and attachment.Parent.Name == "Head" then
+        return true
+    end
+
+    if accessory.Parent and accessory.Parent:IsA("Model") then
+        local head = accessory.Parent:FindFirstChild("Head")
+        if head and handle then
+            if handle.Position.Y >= head.Position.Y then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
+local function removeTargetedItems(character)
+    if not character then return end
+
+    for _, item in pairs(character:GetChildren()) do
+        if item:IsA("Accessory") and hasItemInName(item) then
+            if not isAccessoryOnHeadOrAbove(item) then
+                item:Destroy()
+            end
+        end
+    end
+end
+
+local function continuouslyCheckItems()
+    while true do
+        for _, player in pairs(Players:GetPlayers()) do
+            if player.Character then
+                removeTargetedItems(player.Character)
+            end
+        end
+
+        Players.PlayerAdded:Connect(function(player)
+            player.CharacterAdded:Connect(function(character)
+                task.wait(0.5)
+                removeTargetedItems(character)
+            end)
+        end)
+
+        task.wait(1)
+    end
+end
+
+continuouslyCheckItems()
