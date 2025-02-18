@@ -5,10 +5,8 @@ local targetItemNames = {"aura", "Fluffy Satin Gloves Black"}
 
 local function hasItemInName(accessory)
     for _, itemName in pairs(targetItemNames) do
-        if accessory.Name:lower():find(itemName:lower()) then
-            return true
-        end
-    end
+                end
+    
     return false
 end
 
