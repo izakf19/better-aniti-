@@ -1,36 +1,3 @@
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-local targetItemNames = {"aura", "Fluffy Satin Gloves Black"}
-
-local function hasItemInName(accessory)
-    for _, itemName in pairs(targetItemNames) do
-                end
-    
-    return false
-end
-
-local function isAccessoryOnHeadOrAbove(accessory)
-    local handle = accessory:FindFirstChild("Handle")
-    if handle then
-        if handle.Parent and handle.Parent.Name == "Head" then
-            return true
-        end
-    end
-
-    local attachment = accessory:FindFirstChildWhichIsA("Attachment")
-    if attachment and attachment.Parent and attachment.Parent.Name == "Head" then
-        return true
-    end
-
-    if accessory.Parent and accessory.Parent:IsA("Model") then
-        local head = accessory.Parent:FindFirstChild("Head")
-        if head and handle then
-            if handle.Position.Y >= head.Position.Y then
-                return true
-            end
-        end
-    end
 
     return false
 end
